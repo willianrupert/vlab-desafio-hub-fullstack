@@ -47,7 +47,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Bloco Central: Atalhos */}
+        {/* Bloco Central: Atalhos (Note os hrefs apontando para os IDs) */}
         <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
           <a href="#menu" style={{ color: "#2563eb", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.textDecoration = "underline"} onMouseLeave={e => e.target.style.textDecoration = "none"}>Ir para o menu [1]</a>
           <a href="#conteudo" style={{ color: "#2563eb", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.textDecoration = "underline"} onMouseLeave={e => e.target.style.textDecoration = "none"}>Ir para o conteúdo [2]</a>
@@ -63,14 +63,13 @@ export default function App() {
       {/* 2. ROTEAMENTO DE TELAS (Login vs Painel Interno) */}
       {!user ? (
         
-        // Se NÃO estiver logado: Mostra Tela de Login/Registro
         <AuthScreen />
         
       ) : (
 
-        // Se ESTIVER logado: Mostra o Painel Completo
         <>
-          <header style={{ backgroundColor: "#1e293b", padding: "16px 5%", display: "flex", alignItems: "center", justifyContent: "space-between", color: "white", position: "sticky", top: 0, zIndex: 50 }}>
+          {/* DICA NINJA: id="menu" AQUI! */}
+          <header id="menu" style={{ backgroundColor: "#1e293b", padding: "16px 5%", display: "flex", alignItems: "center", justifyContent: "space-between", color: "white", position: "sticky", top: 0, zIndex: 50 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
               <div style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)", padding: "10px", borderRadius: "12px" }}>
                 <GraduationCap size={24} color="white" />
@@ -85,7 +84,8 @@ export default function App() {
             </button>
           </header>
 
-          <main style={{ width: "100%", maxWidth: "1200px", margin: "0 auto", padding: "40px 5%", flex: 1 }}>
+          {/* DICA NINJA: id="conteudo" AQUI! */}
+          <main id="conteudo" style={{ width: "100%", maxWidth: "1200px", margin: "0 auto", padding: "40px 5%", flex: 1 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "24px", marginBottom: "40px" }}>
               <div>
                 <h2 style={{ fontSize: "32px", fontWeight: "800", color: "#0f172a", margin: "0 0 8px 0" }}>Plataforma de Materiais</h2>
@@ -116,7 +116,8 @@ export default function App() {
       )}
 
       {/* 3. FOOTER INSTITUCIONAL (Fica sempre visível no final) */}
-      <footer style={{ backgroundColor: "#1e293b", color: "#94a3b8", padding: "30px 5%", borderTop: "4px solid #2563eb", marginTop: "auto" }}>
+      {/* DICA NINJA: id="rodape" AQUI! */}
+      <footer id="rodape" style={{ backgroundColor: "#1e293b", color: "#94a3b8", padding: "30px 5%", borderTop: "4px solid #2563eb", marginTop: "auto" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", color: "white", fontWeight: "bold" }}>
             <GraduationCap size={20} color="#3b82f6" />
