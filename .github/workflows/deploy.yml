@@ -1,0 +1,25 @@
+name: Deploy Backend para Oracle
+
+on:
+  push:
+    branches:
+      - producao # A mágica acontece aqui: o deploy só roda nessa branch!
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conectando na VM e atualizando
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/vlab-desafio-hub-fullstack
+            git fetch --all
+            git checkout producao
+            git pull origin producao
+            source .venv/bin/activate
+            pip install -r requirements.txt
+            sudo systemctl restart hub-backend

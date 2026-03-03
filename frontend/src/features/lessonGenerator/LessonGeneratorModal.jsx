@@ -147,7 +147,7 @@ export default function LessonGeneratorModal({ resourceTitle, onClose }) {
             <div className="loading-box">
               <Loader2 size={48} color="#8b5cf6" className="animate-spin" />
               <div>
-                <h4 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#0f172a' }}>O Motor de IA está a criar a aula...</h4>
+                <h4 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#0f172a' }}>O Motor de IA está criando a aula...</h4>
                 <p style={{ margin: 0, fontSize: '14px', color: '#64748b' }}>Aplicando técnicas de Chain-of-Thought e Persona Prompting.</p>
               </div>
               <div className="loading-timer">00:{timer < 10 ? `0${timer}` : timer}s</div>
