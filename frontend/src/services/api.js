@@ -69,4 +69,15 @@ export const api = {
     }
   },
 
+syncDocente: async (payload) => {
+    logger.info("POST /api/docentes", payload);
+    try {
+      const response = await apiClient.post('/docentes', payload);
+      return response.data;
+    } catch(e) {
+      logger.error("Falha ao salvar docente no banco", e.message);
+      throw e;
+    }
+  },
+
 };

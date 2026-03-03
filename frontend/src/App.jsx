@@ -26,16 +26,38 @@ export default function App() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "#f8fafc" }}>
       
-      {/* 1. BARRA GLOBAL DE ACESSIBILIDADE (Fica sempre visível) */}
-      <div className="barra-acessibilidade" style={{ background: "#e2e8f0", padding: "6px 5%", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#475569", fontWeight: "600" }}>
-        <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-          <span>Acessibilidade:</span>
-          <button onClick={() => setHighContrast(!highContrast)} style={{ background: "none", border: "1px solid #cbd5e1", cursor: "pointer", borderRadius: "4px", padding: "2px 6px" }}>Alto Contraste</button>
-          <button onClick={() => setFontSize(prev => Math.max(prev - 10, 80))} style={{ border: "1px solid #cbd5e1", background: "white", padding: "2px 6px", cursor: "pointer", borderRadius: "4px" }}>A-</button>
-          <button onClick={() => setFontSize(100)} style={{ border: "1px solid #cbd5e1", background: "white", padding: "2px 6px", cursor: "pointer", borderRadius: "4px" }}>A</button>
-          <button onClick={() => setFontSize(prev => Math.min(prev + 10, 150))} style={{ border: "1px solid #cbd5e1", background: "white", padding: "2px 6px", cursor: "pointer", borderRadius: "4px" }}>A+</button>
+      {/* 1. BARRA GLOBAL DE ACESSIBILIDADE (Padrão Gov.br) */}
+      <div className="barra-acessibilidade" style={{ background: "#f1f5f9", padding: "8px 5%", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#475569", fontWeight: "600", borderBottom: "1px solid #e2e8f0", flexWrap: "wrap", gap: "10px" }}>
+        
+        {/* Bloco Esquerdo: Controles */}
+        <div style={{ display: "flex", gap: "20px", alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ textTransform: "uppercase", letterSpacing: "0.05em", fontSize: "11px" }}>Acessibilidade</span>
+          
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span>Contraste</span>
+            <button onClick={() => setHighContrast(false)} style={{ width: "16px", height: "16px", borderRadius: "50%", background: "white", border: "2px solid #94a3b8", cursor: "pointer" }} title="Contraste Padrão"></button>
+            <button onClick={() => setHighContrast(true)} style={{ width: "16px", height: "16px", borderRadius: "50%", background: "#0f172a", border: "none", cursor: "pointer" }} title="Alto Contraste"></button>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <span style={{ marginRight: "4px" }}>Tamanho da letra</span>
+            <button onClick={() => setFontSize(prev => Math.max(prev - 10, 80))} style={{ border: "1px solid #cbd5e1", background: "white", padding: "2px 6px", cursor: "pointer", borderRadius: "4px", color: "#0f172a" }}>A-</button>
+            <button onClick={() => setFontSize(100)} style={{ border: "1px solid #cbd5e1", background: "white", padding: "2px 6px", cursor: "pointer", borderRadius: "4px", color: "#0f172a" }}>A</button>
+            <button onClick={() => setFontSize(prev => Math.min(prev + 10, 150))} style={{ border: "1px solid #cbd5e1", background: "white", padding: "2px 6px", cursor: "pointer", borderRadius: "4px", color: "#0f172a" }}>A+</button>
+          </div>
         </div>
-        {user && <div style={{ color: "#2563eb" }}>Logado como: {user.name}</div>}
+
+        {/* Bloco Central: Atalhos */}
+        <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+          <a href="#menu" style={{ color: "#2563eb", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.textDecoration = "underline"} onMouseLeave={e => e.target.style.textDecoration = "none"}>Ir para o menu [1]</a>
+          <a href="#conteudo" style={{ color: "#2563eb", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.textDecoration = "underline"} onMouseLeave={e => e.target.style.textDecoration = "none"}>Ir para o conteúdo [2]</a>
+          <a href="#rodape" style={{ color: "#2563eb", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.textDecoration = "underline"} onMouseLeave={e => e.target.style.textDecoration = "none"}>Ir para o rodapé [3]</a>
+        </div>
+
+        {/* Bloco Direito: Idioma */}
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <span style={{ fontWeight: "700" }}>Português | BR</span>
+        </div>
       </div>
 
       {/* 2. ROTEAMENTO DE TELAS (Login vs Painel Interno) */}

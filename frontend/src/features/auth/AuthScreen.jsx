@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Loader2, GraduationCap, UserPlus } from 'lucide-react';
+import { Eye, EyeOff, Loader2, GraduationCap, UserCheck } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 
 export default function AuthScreen() {
-  const { login, register, loginGoogle, loading } = useAuth();
-  
-  // Controle para saber se está na tela de Login ou Criar Conta
+  const { login, register, loginGoogle, loginAvaliador, loading } = useAuth();
   const [isRegistering, setIsRegistering] = useState(false); 
   
   const [nome, setNome] = useState('');
@@ -24,7 +22,10 @@ export default function AuthScreen() {
         await login(email, password);
       }
     } catch (err) {
-      setError(err.message);
+      // Traduz erros comuns do Firebase para o usuário
+      if (err.code === 'auth/invalid-credential') setError('E-mail ou senha incorretos.');
+      else if (err.code === 'auth/email-already-in-use') setError('Este e-mail já está cadastrado.');
+      else setError('Erro na autenticação. Verifique os dados.');
     }
   };
 
@@ -48,10 +49,18 @@ export default function AuthScreen() {
           </div>
         )}
 
-        <button type="button" onClick={loginGoogle} disabled={loading} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", background: "white", border: "1px solid #e2e8f0", padding: "12px", borderRadius: "12px", fontSize: "14px", fontWeight: "700", color: "#334155", cursor: "pointer", marginBottom: "24px", transition: "all 0.2s" }}>
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style={{ width: "18px" }} />
-          Continuar com Google
-        </button>
+        {/* ÁREA DOS BOTÕES EXTERNOS */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px" }}>
+          <button type="button" onClick={loginGoogle} disabled={loading} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", background: "white", border: "1px solid #e2e8f0", padding: "12px", borderRadius: "12px", fontSize: "14px", fontWeight: "700", color: "#334155", cursor: "pointer", transition: "all 0.2s" }}>
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style={{ width: "18px" }} />
+            Continuar com Google
+          </button>
+
+          <button type="button" onClick={loginAvaliador} disabled={loading} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", background: "#f8fafc", border: "1px dashed #cbd5e1", padding: "12px", borderRadius: "12px", fontSize: "14px", fontWeight: "700", color: "#475569", cursor: "pointer", transition: "all 0.2s" }} title="Acesso rápido para avaliação">
+            <UserCheck size={18} color="#2563eb" />
+            Acesso Rápido do Avaliador
+          </button>
+        </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
           <div style={{ flex: 1, height: "1px", background: "#e2e8f0" }}></div>
@@ -60,8 +69,6 @@ export default function AuthScreen() {
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          
-          {/* Campo NOME (Só aparece no Registro) */}
           {isRegistering && (
             <div>
               <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#475569", marginBottom: "6px" }}>NOME COMPLETO</label>
@@ -87,7 +94,6 @@ export default function AuthScreen() {
           </button>
         </form>
 
-        {/* Botão para alternar entre Login e Registro */}
         <button type="button" onClick={() => { setIsRegistering(!isRegistering); setError(''); }} style={{ width: "100%", background: "none", border: "none", color: "#475569", fontSize: "13px", fontWeight: "600", marginTop: "24px", cursor: "pointer", textDecoration: "underline" }}>
           {isRegistering ? "Já tenho uma conta. Fazer Login." : "Ainda não tem conta? Cadastre-se aqui."}
         </button>
