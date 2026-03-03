@@ -60,7 +60,7 @@ cp .env.example .env
 # Adicione as suas chaves GEMINI_API_KEY e OPENAI_API_KEY no arquivo .env
 
 # Executar o servidor FastAPI
-uvicorn backend.main:app --reload
+python -m uvicorn backend.main:app --reload
 ```
 A API estará disponível em `http://127.0.0.1:8000`. Você pode consultar a documentação interativa acessando `/docs`.
 
