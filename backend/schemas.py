@@ -34,3 +34,15 @@ class SmartAssistResponse(BaseModel):
 class PaginatedRecursos(BaseModel):
     total: int
     items: List[RecursoResponse]
+
+class DocenteBase(BaseModel):
+    nome: str
+    email: str
+    firebase_uid: str
+
+class DocenteCreate(DocenteBase):
+    pass
+
+class DocenteResponse(DocenteBase):
+    id: int
+    model_config = ConfigDict(from_attributes=True)

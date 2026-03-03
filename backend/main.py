@@ -120,6 +120,25 @@ def update_resource(resource_id: int, recurso: schemas.RecursoCreate, db: Sessio
     db.refresh(db_recurso)
     return db_recurso
 
+@app.post("/api/docentes", response_model=schemas.DocenteResponse, status_code=status.HTTP_201_CREATED)
+def sync_docente(docente: schemas.DocenteCreate, db: Session = Depends(get_db)):
+    """Sincroniza o usuário logado no Firebase com o banco de dados local."""
+    # Verifica se o professor já existe no banco
+    db_docente = db.query(database.DocenteDB).filter(database.DocenteDB.email == docente.email).first()
+    if db_docente:
+        return db_docente # Se já existir, só devolve os dados
+    
+    # Se for novo (primeiro acesso via Google ou Registro), salva no banco!
+    new_docente = database.DocenteDB(
+        nome=docente.nome,
+        email=docente.email,
+        firebase_uid=docente.firebase_uid
+    )
+    db.add(new_docente)
+    db.commit()
+    db.refresh(new_docente)
+    return new_docente
+
 @app.post("/api/smart-assist", response_model=schemas.SmartAssistResponse)
 @log_ai_request
 def smart_assist(request: schemas.SmartAssistRequest):

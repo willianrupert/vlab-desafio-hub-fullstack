@@ -20,3 +20,11 @@ class RecursoDB(Base):
     tipo = Column(String)
     link_url = Column(String)
     tags = Column(JSON) # O SQLite nativo aceita JSON para listas!
+
+class DocenteDB(Base):
+    __tablename__ = "docentes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nome = Column(String)
+    email = Column(String, unique=True, index=True)
+    firebase_uid = Column(String, unique=True, index=True)
