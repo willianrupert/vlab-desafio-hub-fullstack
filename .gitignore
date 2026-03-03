@@ -3,3 +3,5 @@
 *.pyc
 .env
 *.env
+frontend/.env
+frontend/.env.*
