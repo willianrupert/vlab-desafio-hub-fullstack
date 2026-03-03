@@ -1,5 +1,7 @@
 from fastapi.testclient import TestClient
 from backend.main import app
+from unittest.mock import patch
+from backend.ai.manager import AIResult
 
 client = TestClient(app)
 
@@ -42,21 +44,31 @@ def test_listagem_com_paginacao():
     assert isinstance(data["items"], list)
     assert len(data["items"]) <= 5
 
-def test_smart_assist_valido():
-    """Testa a rota da IA garantindo que devolve a descrição e exatamente 3 tags."""
+@patch("backend.main.generate_resource_metadata")
+def test_smart_assist_valido(mock_generate):
+    """Testa a rota da IA garantindo que devolve a descrição e tags (usando Mock)."""
+    
+    # Configuramos o Mock para devolver um AIResult perfeito sem ir à internet
+    mock_generate.return_value = AIResult(
+        descricao="Descrição mockada perfeitamente para o teste de CI.",
+        tags=["teste", "mock", "ci"],
+        provider="MockedAPI",
+        fallback_used=False
+    )
+    
     payload = {
         "titulo": "Matemática Financeira",
         "tipo": "Vídeo"
     }
-    # Este teste vai bater na API real do Gemini, pode demorar 1-2 segundos
+    
+    # O cliente vai chamar a rota, que vai chamar o nosso Mock em vez da IA real
     response = client.post("/api/smart-assist", json=payload)
     
     assert response.status_code == 200
     data = response.json()
     assert "descricao" in data
     assert "tags" in data
-    assert isinstance(data["tags"], list)
-    assert len(data["tags"]) == 3
+    assert data["descricao"] == "Descrição mockada perfeitamente para o teste de CI."
 
 def test_sincronizar_docente_novo():
     """Testa se o backend consegue salvar um novo docente que veio do Firebase."""
