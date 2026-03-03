@@ -37,7 +37,7 @@ Além dos requisitos básicos do edital, este projeto inclui implementações de
 
 ### 1. Clonar o Repositório
 ```bash
-git clone [https://github.com/SEU_USUARIO/vlab-desafio-hub-fullstack.git](https://github.com/SEU_USUARIO/vlab-desafio-hub-fullstack.git)
+git clone [https://github.com/SEU_USUARIO/vlab-desafio-hub-fullstack.git](https://github.com/willianrupert/vlab-desafio-hub-fullstack.git)
 cd vlab-desafio-hub-fullstack
 ```
 
