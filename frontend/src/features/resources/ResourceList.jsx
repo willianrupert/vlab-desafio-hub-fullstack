@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { api } from '../../services/api';
-import { Video, FileText, Link2, Trash2, Edit, ExternalLink, ChevronLeft, ChevronRight, Loader2, RotateCcw } from 'lucide-react';
+import { Video, FileText, Link2, Trash2, Edit, ExternalLink, ChevronLeft, ChevronRight, Loader2, RotateCcw, Sparkles } from 'lucide-react';
+import LessonGeneratorModal from '../lessonGenerator/LessonGeneratorModal';
 
 export default function ResourceList({ onEdit }) {
   const [items, setItems] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
+  
+  // Novo State para controlar a exibição do Modal de Geração de Aula
+  const [generatorResourceTitle, setGeneratorResourceTitle] = useState(null);
   
   // Estados para o "Desfazer" com Countdown
   const [deletedToast, setDeletedToast] = useState(null);
@@ -104,7 +108,27 @@ export default function ResourceList({ onEdit }) {
                 </div>
                 <h3 style={{ margin: 0, fontSize: "18px", color: "#0f172a", fontWeight: "700", lineHeight: "1.3" }}>{r.titulo}</h3>
                 <p style={{ margin: 0, fontSize: "14px", color: "#64748b", lineHeight: "1.6", flex: 1 }}>{r.descricao}</p>
-                <a href={r.link_url} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px", background: "#f8fafc", color: "#2563eb", textDecoration: "none", padding: "10px", borderRadius: "8px", fontSize: "13px", fontWeight: "700", border: "1px solid #e2e8f0" }}>Acessar Material</a>
+                
+                {/* DIV PARA AGRUPAR OS BOTÕES NA BASE DO CARD */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
+                  <a href={r.link_url} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px", background: "#f8fafc", color: "#2563eb", textDecoration: "none", padding: "10px", borderRadius: "8px", fontSize: "13px", fontWeight: "700", border: "1px solid #e2e8f0" }}>Acessar Material</a>
+                  
+                  {/* NOVO BOTÃO DE GERAR AULA */}
+                  <button 
+                    onClick={() => setGeneratorResourceTitle(r.titulo)}
+                    style={{ 
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', 
+                      background: '#f5f3ff', color: '#8b5cf6', border: '1px solid #ddd6fe', 
+                      padding: '10px', borderRadius: '8px', fontSize: '13px', 
+                      fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#ede9fe'}
+                    onMouseLeave={e => e.currentTarget.style.background = '#f5f3ff'}
+                  >
+                    <Sparkles size={16} /> Gerar Aula Otimizada
+                  </button>
+                </div>
+
               </div>
             );
           })}
@@ -117,6 +141,14 @@ export default function ResourceList({ onEdit }) {
         <span style={{ fontSize: "14px", color: "#64748b", fontWeight: "600" }}>Página {page + 1} de {totalPages}</span>
         <button onClick={() => setPage(p => p + 1)} disabled={page >= totalPages - 1} style={{ display: "flex", alignItems: "center", gap: "6px", background: "none", border: "none", color: page >= totalPages - 1 ? "#cbd5e1" : "#2563eb", cursor: page >= totalPages - 1 ? "not-allowed" : "pointer", fontWeight: "600" }}>Próxima <ChevronRight size={18} /></button>
       </div>
+
+      {/* O MODAL FICA AQUI NO FINAL (RENDERIZADO CONDICIONALMENTE) */}
+      {generatorResourceTitle && (
+        <LessonGeneratorModal 
+          resourceTitle={generatorResourceTitle} 
+          onClose={() => setGeneratorResourceTitle(null)} 
+        />
+      )}
     </div>
   );
 }
