@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { logger } from '../utils/logger';
 
-// Aponta para o seu FastAPI rodando localmente
+// Aponta para o servidor
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
 });
 
 // Atraso artificial para testar loading states
