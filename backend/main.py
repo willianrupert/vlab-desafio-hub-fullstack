@@ -144,12 +144,11 @@ def sync_docente(docente: schemas.DocenteCreate, db: Session = Depends(get_db)):
 def smart_assist(request: schemas.SmartAssistRequest):
     """
     Integração modularizada com LLMs (Gemini c/ Fallback ChatGPT) 
-    para gerar descrições e tags.
+    para gerar descrições e tags. Agora realiza Scraping da URL para contexto rico!
     """
     try:
-        # A magia acontece no Manager. Ele devolve nossa Dataclass lindinha.
-        # O Pydantic do FastAPI vai converter essa Dataclass pro JSON final automaticamente!
-        return generate_resource_metadata(request.titulo, request.tipo.value)
+        # Passamos a URL extraída do request para o manager
+        return generate_resource_metadata(request.titulo, request.tipo.value, request.url)
     
     except Exception as e:
         logger.error(f"[ERROR] Smart Assist Crítico: {e}")

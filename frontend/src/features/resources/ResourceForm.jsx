@@ -32,8 +32,9 @@ export default function ResourceForm({ onCreated, resourceToEdit, clearEdit }) {
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
   const handleAI = async () => {
-    if (!form.titulo.trim()) {
-      setMensagem({ tipo: "erro", texto: "Preencha o Título antes de usar a IA." });
+    // Nova trava de segurança: Exige Título e URL
+    if (!form.titulo.trim() || !form.url.trim()) {
+      setMensagem({ tipo: "erro", texto: "Preencha o Título e a URL antes de usar a IA." });
       return;
     }
     
@@ -46,15 +47,21 @@ export default function ResourceForm({ onCreated, resourceToEdit, clearEdit }) {
       setTempoPensamento(prev => prev + 0.1);
     }, 100);
 
-    logger.info("AI Request Triggered", { titulo: form.titulo, tipo: form.tipo });
+    logger.info("AI Request Triggered", { titulo: form.titulo, tipo: form.tipo, url: form.url });
     
     try {
-      const res = await api.smartAssist({ titulo: form.titulo, tipo: form.tipo });
+      // A MÁGICA AQUI: Enviando a URL para o motor!
+      const res = await api.smartAssist({ 
+        titulo: form.titulo, 
+        tipo: form.tipo, 
+        url: form.url 
+      });
+      
       set("descricao", res.descricao);
       set("tags", Array.isArray(res.tags) ? res.tags.join(", ") : res.tags);
-      setMensagem({ tipo: "sucesso", texto: "Descrição gerada com IA!" });
-    } catch {
-      setMensagem({ tipo: "erro", texto: "Erro ao contatar os serviços de Inteligência Artificial." });
+      setMensagem({ tipo: "sucesso", texto: "Descrição gerada com IA e Scraping!" });
+    } catch (e) {
+      setMensagem({ tipo: "erro", texto: e.message || "Erro ao contatar os serviços de Inteligência Artificial." });
     } finally {
       // Para o cronômetro
       clearInterval(timerInterval.current);

@@ -32,16 +32,16 @@ export const api = {
     }
   },
   
-  smartAssist: async ({ titulo, tipo }) => {
-    logger.info("POST /api/smart-assist", { titulo, tipo });
+  smartAssist: async ({ titulo, tipo, url }) => {  // <--  'url'
+    logger.info("POST /api/smart-assist", { titulo, tipo, url });
     try {
-      const response = await apiClient.post('/smart-assist', { titulo, tipo });
+      // <-- 'url'
+      const response = await apiClient.post('/smart-assist', { titulo, tipo, url }); 
       return response.data;
     } catch(e) {
-      // Pega o erro exato que o FastAPI enviou, ou o erro de rede
       const erroReal = e.response?.data?.detail || e.message;
       logger.error("Smart Assist falhou no backend!", erroReal);
-      throw new Error(erroReal); // Lança o erro para o formulário exibir
+      throw new Error(erroReal);
     }
   },
 

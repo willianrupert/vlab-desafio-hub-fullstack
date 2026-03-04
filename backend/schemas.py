@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, HttpUrl, ConfigDict
-from typing import List
+from typing import List, Optional
 from enum import Enum
 
 # Restringe os tipos exatos pedidos no edital
@@ -26,6 +26,7 @@ class RecursoResponse(RecursoBase):
 class SmartAssistRequest(BaseModel):
     titulo: str = Field(..., min_length=3, description="O título inserido pelo utilizador")
     tipo: TipoRecurso = Field(..., description="O tipo do material")
+    url: Optional[str] = Field(None, description="A URL do material para scraping") # <-- NOVO
 
 class SmartAssistResponse(BaseModel):
     descricao: str = Field(..., description="A descrição gerada pela IA")
