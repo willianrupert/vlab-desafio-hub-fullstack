@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, HttpUrl, ConfigDict
 from typing import List, Optional
 from enum import Enum
 
-# Restringe os tipos exatos pedidos no edital
+# Restringe os tipos exatos do edital
 class TipoRecurso(str, Enum):
     video = "Vídeo"
     pdf = "PDF"

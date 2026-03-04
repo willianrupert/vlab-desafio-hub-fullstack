@@ -36,7 +36,7 @@ def get_db():
     finally:
         db.close()
 
-# USO DE RECURSO MODERNO: Decorator Avançado para Logs
+# Decorator para Logs
 def log_ai_request(func):
     """
     Decorator que mede latência e extrai metadados da Dataclass AIResult 
@@ -52,7 +52,7 @@ def log_ai_request(func):
         latency = time.time() - start_time
         
         # O edital pede: [INFO] AI Request: Title="...", TokenUsage=150, Latency=1.2s.
-        # Adicionamos Provider e Fallback para impressionar!
+        # Adicionamos Provider e Fallback
         logger.info(
             f'[INFO] AI Request: Title="{request.titulo}", Provider="{resultado.provider}", '
             f'Fallback={resultado.fallback_used}, TokenUsage={resultado.token_usage}, Latency={latency:.2f}s'
@@ -128,7 +128,7 @@ def sync_docente(docente: schemas.DocenteCreate, db: Session = Depends(get_db)):
     if db_docente:
         return db_docente # Se já existir, só devolve os dados
     
-    # Se for novo (primeiro acesso via Google ou Registro), salva no banco!
+    # Se for novo (primeiro acesso via Google ou Registro), salva no banco
     new_docente = database.DocenteDB(
         nome=docente.nome,
         email=docente.email,

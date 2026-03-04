@@ -10,7 +10,7 @@ from backend.ai.openai_provider import call_openai
 
 logger = logging.getLogger(__name__)
 
-# USO DE RECURSO MODERNO: Dataclass para padronizar o tráfego interno de dados
+# Dataclass para padronizar o tráfego interno de dados
 @dataclass
 class AIResult:
     descricao: str
@@ -38,7 +38,7 @@ def extract_youtube_transcript(url: str) -> str:
             primeira_legenda = list(transcript_list)[0]
             transcript = primeira_legenda.fetch()
             
-        # A MÁGICA DA CORREÇÃO AQUI: Lidando com Dicionários E Objetos
+        # Dicionários E Objetos
         partes_texto = []
         for t in transcript:
             if isinstance(t, dict):
@@ -85,7 +85,7 @@ def extract_webpage_text(url: str) -> str:
 def generate_resource_metadata(title: str, resource_type: str, url: str = None) -> AIResult:
     scraped_content = ""
     
-    # 1. Tentar fazer scraping baseado no tipo ou URL
+    # 1. Tentar fazer a coleta de dados baseado no tipo ou URL
     if url:
         if "youtube.com" in url or "youtu.be" in url:
             scraped_content = extract_youtube_transcript(url)

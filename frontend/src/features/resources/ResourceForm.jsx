@@ -3,7 +3,7 @@ import { Sparkles, Loader2, Plus, Save } from 'lucide-react';
 import { api } from '../../services/api';
 import { logger } from '../../utils/logger';
 
-// Adicionamos as props resourceToEdit e clearEdit
+// Adiciona as props resourceToEdit e clearEdit
 export default function ResourceForm({ onCreated, resourceToEdit, clearEdit }) {
   const [form, setForm] = useState({ titulo: "", tipo: "Vídeo", url: "", descricao: "", tags: "" });
   const [busy, setBusy] = useState(false);
@@ -12,7 +12,7 @@ export default function ResourceForm({ onCreated, resourceToEdit, clearEdit }) {
   const [tempoPensamento, setTempoPensamento] = useState(0);
   const timerInterval = useRef(null);
 
-  // EFEITO MÁGICO: Se receber um recurso para editar, preenche o formulário!
+  // Se receber um recurso para editar, preenche o formulário
   useEffect(() => {
     if (resourceToEdit) {
       setForm({
@@ -50,7 +50,7 @@ export default function ResourceForm({ onCreated, resourceToEdit, clearEdit }) {
     logger.info("AI Request Triggered", { titulo: form.titulo, tipo: form.tipo, url: form.url });
     
     try {
-      // A MÁGICA AQUI: Enviando a URL para o motor!
+      // Enviando a URL para o motor!
       const res = await api.smartAssist({ 
         titulo: form.titulo, 
         tipo: form.tipo, 

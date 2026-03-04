@@ -68,7 +68,7 @@ export default function App() {
       ) : (
 
         <>
-          {/* DICA NINJA: id="menu" AQUI! */}
+          {/* id="menu" */}
           <header id="menu" style={{ backgroundColor: "#1e293b", padding: "16px 5%", display: "flex", alignItems: "center", justifyContent: "space-between", color: "white", position: "sticky", top: 0, zIndex: 50 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
               <div style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)", padding: "10px", borderRadius: "12px" }}>
@@ -116,7 +116,7 @@ export default function App() {
       )}
 
       {/* 3. FOOTER INSTITUCIONAL (Fica sempre visível no final) */}
-      {/* DICA NINJA: id="rodape" AQUI! */}
+      {/* id="rodape" */}
       <footer id="rodape" style={{ backgroundColor: "#1e293b", color: "#94a3b8", padding: "30px 5%", borderTop: "4px solid #2563eb", marginTop: "auto" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", color: "white", fontWeight: "bold" }}>

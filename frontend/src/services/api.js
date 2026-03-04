@@ -64,7 +64,6 @@ export const api = {
 
   },
 
-  // ... (mantenha o getResources, createResource e smartAssist que já estavam aí)
   
   updateResource: async (id, payload) => {
     logger.info(`PUT /api/resources/${id}`, payload);

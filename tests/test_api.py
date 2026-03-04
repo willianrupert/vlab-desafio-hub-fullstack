@@ -48,7 +48,7 @@ def test_listagem_com_paginacao():
 def test_smart_assist_valido(mock_generate):
     """Testa a rota da IA garantindo que devolve a descrição e tags (usando Mock)."""
     
-    # Configuramos o Mock para devolver um AIResult perfeito sem ir à internet
+    # Mock para devolver um AIResult perfeito sem ir à internet
     mock_generate.return_value = AIResult(
         descricao="Descrição mockada perfeitamente para o teste de CI.",
         tags=["teste", "mock", "ci"],

@@ -4,7 +4,6 @@ import './LessonModal.css';
 import { api } from '../../services/api'; // <-- IMPORTAÇÃO da API real
 
 // Mock temporário para gerar a interface. 
-// Mais tarde, trocaremos essa função por uma chamada real à sua API na Oracle Cloud.
 const mockGerarAula = async (params) => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -69,20 +68,20 @@ export default function LessonGeneratorModal({ resourceTitle, resourceDescriptio
     // Estruturando o JSON exatamente como o seu modelo Pydantic do FastAPI espera
     const payload = {
       aluno: { 
-        nome: "Estudante", // Você pode adicionar um input para o nome depois, se quiser
+        nome: "Estudante", // input para o nome no futuro
         idade: parseInt(idade), 
         nivel: nivel, 
         estilo_aprendizado: estilo 
       },
       topico: resourceTitle,
-      tipo_conteudo: "Conceitual", // Você pode criar um dropdown no form para o usuário escolher o tipo de aula depois
+      tipo_conteudo: "Conceitual",
       descricao_material: resourceDescription // <-- A DESCRIÇÃO RICA
     };
 
     try {
       const result = await api.gerarAula(payload);
       
-      // O seu motor retorna um JSON com as chaves "raciocinio" e "conteudo"
+      // O motor retorna um JSON com as chaves "raciocinio" e "conteudo"
       setGeneratedLesson({
         titulo: resourceTitle,
         conteudo: result.conteudo || JSON.stringify(result), // Faz fallback caso retorne um tipo diferente

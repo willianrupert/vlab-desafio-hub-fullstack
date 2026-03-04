@@ -19,7 +19,7 @@ class RecursoDB(Base):
     descricao = Column(String)
     tipo = Column(String)
     link_url = Column(String)
-    tags = Column(JSON) # O SQLite nativo aceita JSON para listas!
+    tags = Column(JSON) # O SQLite nativo aceita JSON para listas
 
 class DocenteDB(Base):
     __tablename__ = "docentes"

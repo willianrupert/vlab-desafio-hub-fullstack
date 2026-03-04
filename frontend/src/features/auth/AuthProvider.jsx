@@ -44,7 +44,7 @@ export function AuthProvider({ children }) {
       const fbUser = result.user;
       const nome = fbUser.displayName || "Docente";
       
-      // Salva ou atualiza no banco de dados Python!
+      // Salva ou atualiza no banco de dados Python
       await api.syncDocente({ nome, email: fbUser.email, firebase_uid: fbUser.uid });
       
       setUser({ name: nome.split(' ')[0], email: fbUser.email, avatar: nome[0].toUpperCase() });
@@ -53,7 +53,7 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // BOTÃO MÁGICO PARA O AVALIADOR
+  // BOTÃO DE ACESSO RÁPIDO PARA O AVALIADOR
   const loginAvaliador = async () => {
     setLoading(true);
     await new Promise(resolve => setTimeout(resolve, 800)); 
