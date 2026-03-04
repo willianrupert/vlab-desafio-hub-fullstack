@@ -18,16 +18,16 @@ Este projeto foi além dos requisitos do desafio Fullstack.
 
 Além da entrega técnica solicitada, foi desenvolvido e publicado em produção um **Motor de Engenharia de Prompts independente**, hospedado em domínio próprio e integrado em tempo real ao Hub Educacional.
 
-### 🌍 Ambientes Publicados
+### Ambientes Publicados
 
 | Projeto | Domínio | Função |
 |---|---|---|
-| 🏫 **Hub Fullstack (este repositório)** | [`edu.rlight.com.br`](https://edu.rlight.com.br) | Plataforma educacional completa com autenticação, CRUD e Smart Assist |
-| 🤖 **Motor de IA (projeto complementar)** | [`ia.rlight.com.br`](https://ia.rlight.com.br) | API FastAPI responsável por gerar aulas pedagógicas personalizadas |
+|  **Hub Fullstack (este repositório)** | [`edu.rlight.com.br`](https://edu.rlight.com.br) | Plataforma educacional completa com autenticação, CRUD e Smart Assist |
+|  **Motor de IA (projeto complementar)** | [`ia.rlight.com.br`](https://ia.rlight.com.br) | API FastAPI responsável por gerar aulas pedagógicas personalizadas |
 
 ---
 
-## 🔗 Integração Real entre os Projetos
+##  Integração Real entre os Projetos
 
 O recurso **Smart Assist** do Hub Fullstack consome diretamente a API:
 
