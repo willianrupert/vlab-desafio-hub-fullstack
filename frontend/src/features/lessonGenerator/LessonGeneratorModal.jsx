@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sparkles, Loader2, BookOpen, Download, UserCheck } from 'lucide-react';
 import './LessonModal.css';
+import { api } from '../../services/api'; // <-- IMPORTAÇÃO da API real
 
 // Mock temporário para gerar a interface. 
 // Mais tarde, trocaremos essa função por uma chamada real à sua API na Oracle Cloud.
@@ -65,18 +66,33 @@ export default function LessonGeneratorModal({ resourceTitle, onClose }) {
     setStep('loading');
     setTimer(0);
 
+    // Estruturando o JSON exatamente como o seu modelo Pydantic do FastAPI espera
     const payload = {
-      topic: resourceTitle,
-      profile: { idade, nivel, estilo }
+      aluno: { 
+        nome: "Estudante", // Você pode adicionar um input para o nome depois, se quiser
+        idade: parseInt(idade), 
+        nivel: nivel, 
+        estilo_aprendizado: estilo 
+      },
+      topico: resourceTitle,
+      tipo_conteudo: "Conceitual" // Você pode criar um dropdown no form para o usuário escolher o tipo de aula depois
     };
 
     try {
-      const result = await mockGerarAula(payload);
-      setGeneratedLesson(result);
+      const result = await api.gerarAula(payload);
+      
+      // O seu motor retorna um JSON com as chaves "raciocinio" e "conteudo"
+      setGeneratedLesson({
+        titulo: resourceTitle,
+        conteudo: result.conteudo || JSON.stringify(result), // Faz fallback caso retorne um tipo diferente
+        raciocinio: result.raciocinio
+      });
+      
       setStep('result');
     } catch (error) {
       console.error("Falha ao gerar aula", error);
-      setStep('form'); // Volta se der erro
+      alert("Houve um erro de comunicação com o servidor de IA.");
+      setStep('form');
     }
   };
 
@@ -157,9 +173,16 @@ export default function LessonGeneratorModal({ resourceTitle, onClose }) {
           {/* PASSO 3: RESULTADO */}
           {step === 'result' && generatedLesson && (
             <div className="lesson-viewer">
+              {generatedLesson.raciocinio && (
+                <details style={{ marginBottom: '16px', padding: '10px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', color: '#475569', fontSize: '14px' }}>
+                  <summary style={{ fontWeight: 'bold', cursor: 'pointer' }}>🧠 Ver Raciocínio Pedagógico da IA</summary>
+                  <p style={{ marginTop: '10px', whiteSpace: 'pre-wrap' }}>{generatedLesson.raciocinio}</p>
+                </details>
+              )}
+
               <h4 style={{ margin: '0 0 16px 0', color: '#8b5cf6', display: 'flex', alignItems: 'center', gap: '8px' }}><BookOpen size={20} /> Conteúdo Gerado</h4>
-              {/* Uma forma brutalmente simples de renderizar quebras de linha e markdown básico num textarea ou pre */}
-              <div style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
+              
+              <div style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit', color: '#1e293b' }}>
                 {generatedLesson.conteudo}
               </div>
             </div>

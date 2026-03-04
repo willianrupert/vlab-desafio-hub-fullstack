@@ -45,6 +45,25 @@ export const api = {
     }
   },
 
+  gerarAula: async (payload) => {
+    logger.info("POST /gerar_aula (Motor IA V-LAB)", payload);
+    try {
+      // Cria uma instância isolada apontando para ia.rlight.com.br
+      // Use uma variável de ambiente ou faça o fallback para o localhost da API Python
+      const iaClient = axios.create({
+        baseURL: import.meta.env.VITE_IA_API_URL || 'http://localhost:8000'
+      });
+      
+      const response = await iaClient.post('/gerar_aula', payload);
+      return response.data;
+    } catch(e) {
+      logger.error("Falha ao comunicar com o Motor de IA", e.message);
+      throw e;
+    }
+  
+
+  },
+
   // ... (mantenha o getResources, createResource e smartAssist que já estavam aí)
   
   updateResource: async (id, payload) => {
