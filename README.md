@@ -16,7 +16,7 @@
 
 Este projeto foi além dos requisitos do desafio Fullstack.
 
-Além da entrega técnica solicitada, foi desenvolvido e publicado em produção um **Motor de Engenharia de Prompts independente**, hospedado em domínio próprio e integrado em tempo real ao Hub Educacional.
+Além da entrega técnica solicitada, foi desenvolvido e publicado em produção um **Motor de Engenharia de Prompts independente** submetido simultaneamente para a vaga de Estágio Dev IA, hospedado em domínio próprio e integrado em tempo real ao Hub Educacional.
 
 ### Ambientes Publicados
 
