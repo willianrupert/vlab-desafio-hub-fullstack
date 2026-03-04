@@ -3,7 +3,7 @@ name: Deploy Backend para Oracle
 on:
   push:
     branches:
-      - producao # A mágica acontece aqui: o deploy só roda nessa branch!
+      - main
 
 jobs:
   deploy:
@@ -18,8 +18,8 @@ jobs:
           script: |
             cd ~/vlab-desafio-hub-fullstack
             git fetch --all
-            git checkout producao
-            git pull origin producao
+            git checkout main
+            git pull origin main
             source .venv/bin/activate
             pip install -r requirements.txt
             sudo systemctl restart hub-backend
