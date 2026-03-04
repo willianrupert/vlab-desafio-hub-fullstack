@@ -40,7 +40,7 @@ Como é que você aplicaria este conceito na sua rotina de estudos atual?
   });
 };
 
-export default function LessonGeneratorModal({ resourceTitle, onClose }) {
+export default function LessonGeneratorModal({ resourceTitle, resourceDescription, onClose }) {
   const [step, setStep] = useState('form'); // 'form' | 'loading' | 'result'
   const [timer, setTimer] = useState(0);
   const [generatedLesson, setGeneratedLesson] = useState(null);
@@ -75,7 +75,8 @@ export default function LessonGeneratorModal({ resourceTitle, onClose }) {
         estilo_aprendizado: estilo 
       },
       topico: resourceTitle,
-      tipo_conteudo: "Conceitual" // Você pode criar um dropdown no form para o usuário escolher o tipo de aula depois
+      tipo_conteudo: "Conceitual", // Você pode criar um dropdown no form para o usuário escolher o tipo de aula depois
+      descricao_material: resourceDescription // <-- A DESCRIÇÃO RICA
     };
 
     try {

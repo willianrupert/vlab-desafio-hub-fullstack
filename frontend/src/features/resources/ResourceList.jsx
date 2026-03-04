@@ -9,10 +9,9 @@ export default function ResourceList({ onEdit }) {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   
-  // Novo State para controlar a exibição do Modal de Geração de Aula
-  const [generatorResourceTitle, setGeneratorResourceTitle] = useState(null);
+  // MODIFICADO: Agora guarda o recurso inteiro em vez de só o título
+  const [generatorResource, setGeneratorResource] = useState(null);
   
-  // Estados para o "Desfazer" com Countdown
   const [deletedToast, setDeletedToast] = useState(null);
   const [countdown, setCountdown] = useState(0);
   const LIMIT = 6;
@@ -32,13 +31,11 @@ export default function ResourceList({ onEdit }) {
 
   useEffect(() => { fetchResources(); }, [fetchResources]);
 
-  // A MÁGICA DO SOFT DELETE COM COUNTDOWN
   const handleDelete = (recurso) => {
     setItems(prev => prev.filter(r => r.id !== recurso.id));
     setTotalItems(prev => prev - 1);
-    setCountdown(5); // Inicia em 5 segundos
+    setCountdown(5);
 
-    // Atualiza o número na tela a cada 1 segundo
     const interval = setInterval(() => {
       setCountdown(prev => {
         if (prev <= 1) {
@@ -49,7 +46,6 @@ export default function ResourceList({ onEdit }) {
       });
     }, 1000);
 
-    // Apaga de verdade após 5 segundos
     const timer = setTimeout(async () => {
       await api.deleteResource(recurso.id);
       setDeletedToast(null);
@@ -79,7 +75,6 @@ export default function ResourceList({ onEdit }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px", position: "relative" }}>
       
-      {/* Toast com Countdown Dinâmico */}
       {deletedToast && (
         <div style={{ background: "#0f172a", color: "white", padding: "12px 24px", borderRadius: "12px", display: "flex", justifyContent: "space-between", alignItems: "center", position: "fixed", bottom: "30px", right: "30px", zIndex: 100, boxShadow: "0 10px 25px rgba(0,0,0,0.2)", animation: "fadeIn 0.3s ease" }}>
           <span style={{ fontSize: "14px", fontWeight: "600" }}>
@@ -109,13 +104,11 @@ export default function ResourceList({ onEdit }) {
                 <h3 style={{ margin: 0, fontSize: "18px", color: "#0f172a", fontWeight: "700", lineHeight: "1.3" }}>{r.titulo}</h3>
                 <p style={{ margin: 0, fontSize: "14px", color: "#64748b", lineHeight: "1.6", flex: 1 }}>{r.descricao}</p>
                 
-                {/* DIV PARA AGRUPAR OS BOTÕES NA BASE DO CARD */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
                   <a href={r.link_url} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px", background: "#f8fafc", color: "#2563eb", textDecoration: "none", padding: "10px", borderRadius: "8px", fontSize: "13px", fontWeight: "700", border: "1px solid #e2e8f0" }}>Acessar Material</a>
                   
-                  {/* NOVO BOTÃO DE GERAR AULA */}
                   <button 
-                    onClick={() => setGeneratorResourceTitle(r.titulo)}
+                    onClick={() => setGeneratorResource(r)} // MODIFICADO: Passando o objeto 'r' inteiro
                     style={{ 
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', 
                       background: '#f5f3ff', color: '#8b5cf6', border: '1px solid #ddd6fe', 
@@ -135,18 +128,18 @@ export default function ResourceList({ onEdit }) {
         </div>
       )}
 
-      {/* Paginação */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "white", padding: "12px 20px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
         <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} style={{ display: "flex", alignItems: "center", gap: "6px", background: "none", border: "none", color: page === 0 ? "#cbd5e1" : "#2563eb", cursor: page === 0 ? "not-allowed" : "pointer", fontWeight: "600" }}><ChevronLeft size={18} /> Anterior</button>
         <span style={{ fontSize: "14px", color: "#64748b", fontWeight: "600" }}>Página {page + 1} de {totalPages}</span>
         <button onClick={() => setPage(p => p + 1)} disabled={page >= totalPages - 1} style={{ display: "flex", alignItems: "center", gap: "6px", background: "none", border: "none", color: page >= totalPages - 1 ? "#cbd5e1" : "#2563eb", cursor: page >= totalPages - 1 ? "not-allowed" : "pointer", fontWeight: "600" }}>Próxima <ChevronRight size={18} /></button>
       </div>
 
-      {/* O MODAL FICA AQUI NO FINAL (RENDERIZADO CONDICIONALMENTE) */}
-      {generatorResourceTitle && (
+      {/* MODIFICADO: Passando a descrição como prop para o Modal */}
+      {generatorResource && (
         <LessonGeneratorModal 
-          resourceTitle={generatorResourceTitle} 
-          onClose={() => setGeneratorResourceTitle(null)} 
+          resourceTitle={generatorResource.titulo} 
+          resourceDescription={generatorResource.descricao}
+          onClose={() => setGeneratorResource(null)} 
         />
       )}
     </div>

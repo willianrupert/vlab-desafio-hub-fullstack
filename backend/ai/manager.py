@@ -20,35 +20,66 @@ class AIResult:
     token_usage: int = field(default=150) # Simulado para o log, já que APIs variam a devolução
 
 def extract_youtube_transcript(url: str) -> str:
-    """Extrai a transcrição de um vídeo do YouTube."""
+    """Extrai a transcrição de um vídeo do YouTube usando a API moderna (v1.2+)."""
     try:
-        video_id_match = re.search(r'(?:v=|\/)([0-9A-Za-z_-]{11}).*', url)
+        video_id_match = re.search(r'(?:v=|\/)([0-9A-Za-z_-]{11})', url)
         if not video_id_match:
+            logger.warning(f"ID do vídeo não encontrado na URL: {url}")
             return ""
+            
         video_id = video_id_match.group(1)
-        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['pt', 'en'])
-        texto = " ".join([t['text'] for t in transcript])
+        ytt_api = YouTubeTranscriptApi()
+        idiomas_prioridade = ['pt-BR', 'pt', 'en', 'es']
+        
+        try:
+            transcript = ytt_api.fetch(video_id, languages=idiomas_prioridade)
+        except Exception:
+            transcript_list = ytt_api.list(video_id)
+            primeira_legenda = list(transcript_list)[0]
+            transcript = primeira_legenda.fetch()
+            
+        # A MÁGICA DA CORREÇÃO AQUI: Lidando com Dicionários E Objetos
+        partes_texto = []
+        for t in transcript:
+            if isinstance(t, dict):
+                partes_texto.append(t.get('text', '')) # Para versões antigas
+            else:
+                partes_texto.append(getattr(t, 'text', '')) # Para a versão nova
+                
+        texto = " ".join(partes_texto)
+        
+        logger.info(f"Legenda extraída com sucesso! ({len(texto)} caracteres)")
         return texto[:15000] # Limite para não explodir tokens
+        
     except Exception as e:
-        logger.warning(f"Erro ao extrair YouTube: {e}")
+        logger.error(f"Erro Crítico no Scraping do YouTube ({url}): {e}")
         return ""
 
 def extract_webpage_text(url: str) -> str:
-    """Extrai texto de uma página web comum."""
+    """Extrai texto de uma página web comum disfarçando a requisição."""
     try:
-        headers = {'User-Agent': 'Mozilla/5.0'} # Para evitar bloqueios básicos
-        response = requests.get(url, headers=headers, timeout=5)
+        # Headers mais robustos para simular um navegador real (evita bloqueios 403)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7'
+        }
+        
+        response = requests.get(url, headers=headers, timeout=10) # Aumentei o timeout para 10s
         response.raise_for_status()
+        
         soup = BeautifulSoup(response.content, 'html.parser')
         
-        # Remove scripts e estilos
-        for script in soup(["script", "style"]):
-            script.extract()
+        # Remove scripts, estilos e menus de navegação inúteis
+        for tag in soup(["script", "style", "nav", "footer", "header"]):
+            tag.extract()
             
         texto = soup.get_text(separator=' ', strip=True)
+        
+        logger.info(f"Webpage extraída com sucesso! ({len(texto)} caracteres)")
         return texto[:15000]
     except Exception as e:
-        logger.warning(f"Erro ao extrair Webpage: {e}")
+        logger.warning(f"Erro ao extrair Webpage ({url}): {e}")
         return ""
 
 def generate_resource_metadata(title: str, resource_type: str, url: str = None) -> AIResult:
